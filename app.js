@@ -99,16 +99,34 @@ function buildCategoryCard(cat, items){
     const name = lang==='it'? it.it : it.en;
     const desc = lang==='it'? (it.desc_it||'') : (it.desc_en||'');
 
-    const nameEl = document.createElement('div'); nameEl.className='item-name'; nameEl.textContent = name;
-    grid.appendChild(nameEl);
-
-    const priceEl = document.createElement('div'); priceEl.className='price'; priceEl.textContent = money(it.price);
-    grid.appendChild(priceEl);
-
-    if(desc){
-      const d = document.createElement('div'); d.className='desc'; d.textContent = desc; grid.appendChild(d);
-      grid.appendChild(document.createElement('div'));
-    }
+  // ✅ nuovo layout per riga voce
+  const row = document.createElement('div');
+  row.className = 'item';
+  
+  const nameEl = document.createElement('div');
+  nameEl.className = 'item-name';
+  nameEl.textContent = name;
+  row.appendChild(nameEl);
+  
+  if (desc) {
+    const d = document.createElement('div');
+    d.className = 'desc';
+    d.textContent = desc;
+    row.appendChild(d);
+  } else {
+    // se non c'è descrizione, aggiungiamo uno spazio vuoto per la seconda riga
+    const spacer = document.createElement('div');
+    spacer.className = 'desc';
+    spacer.textContent = '';
+    row.appendChild(spacer);
+  }
+  
+  const priceEl = document.createElement('div');
+  priceEl.className = 'price';
+  priceEl.textContent = money(it.price);
+  row.appendChild(priceEl);
+  
+  grid.appendChild(row);
   });
   card.appendChild(grid);
 
