@@ -4,6 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DA·MA Milano — Menu</title>
+
+  <!-- Playfair Display per il wordmark -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#0b0d0f;           /* deep charcoal */
@@ -31,9 +37,22 @@
     .bar{
       max-width:1100px; margin:0 auto; padding:14px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;
     }
-    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.06em}
-    .brand small{font-weight:600; color:var(--muted); letter-spacing:.02em}
-    .logo{height:36px; width:auto; display:block; filter:drop-shadow(0 1px 0 rgba(255,255,255,.06));}
+
+    /* Wordmark testuale */
+    .brand{display:flex; align-items:center}
+    .wordmark{
+      display:flex; align-items:baseline; gap:10px; text-decoration:none; color:#fff;
+    }
+    .wordmark .brand-text{
+      font-family:"Playfair Display", serif;
+      font-weight:800; letter-spacing:.08em; font-size:26px; line-height:1;
+    }
+    .wordmark .brand-text .sep{ margin:0 .12em; }
+    .wordmark .city{
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+      font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--muted); font-size:12px; line-height:1;
+    }
 
     .pill{
       background:var(--bg-soft); border:1px solid rgba(255,255,255,.06); border-radius:999px; padding:10px 14px; display:flex; align-items:center; gap:10px;
@@ -77,16 +96,27 @@
 
     footer{ max-width:1100px; margin:36px auto; padding:0 16px 28px; color:var(--muted); font-size:12px }
 
-    /* --- MOBILE OVERRIDES --- */
+    /* --- MOBILE OVERRIDES: nav in DUE RIGHE con scorrimento per colonne --- */
     @media (max-width: 880px) {
       main { grid-template-columns: 1fr; }
       .pill input { width: 160px; }
       nav {
-        position: static; display: flex; flex-direction: row;
-        overflow-x: auto; gap: 8px; background: var(--card);
-        border-radius: var(--radius); border: 1px solid rgba(255,255,255,.06); padding: 8px;
+        position: static;
+        display: grid;
+        grid-auto-flow: column;           /* scorri per colonne */
+        grid-auto-columns: max-content;   /* larghezza minima per bottone */
+        grid-template-rows: repeat(2, auto); /* DUE RIGHE */
+        align-content: start;
+        gap: 6px 8px;                     /* righe x colonne */
+        overflow-x: auto;                 /* scroll orizzontale breve */
+        background: var(--card);
+        border-radius: var(--radius);
+        border: 1px solid rgba(255,255,255,.06);
+        padding: 8px;
       }
-      nav button { flex: 0 0 auto; white-space: nowrap; }
+      nav button {
+        white-space: nowrap;  /* etichette su una sola riga */
+      }
     }
 
     /* print-friendly */
@@ -101,9 +131,11 @@
 <body>
   <header>
     <div class="bar">
-      <div class="brand" aria-label="DA·MA Milano">
-        <!-- Usa un tuo file locale se preferisci -->
-        <img class="logo" src="logo-dama.png" alt="DA·MA Milano" />
+      <div class="brand" aria-label="DA.MA Milano">
+        <a href="#" class="wordmark" aria-label="DA.MA Milano">
+          <span class="brand-text">DA<span class="sep">.</span>MA</span>
+          <span class="city">Milano</span>
+        </a>
       </div>
 
       <div class="pill" role="search">
@@ -306,7 +338,7 @@ const langBtn = document.getElementById('lang');
 const langLabel = document.getElementById('langLabel');
 
 /** =========================
- *  Rendering NAV
+ *  Rendering NAV (con emoji)
  *  =========================
  */
 function renderCats(){
@@ -319,10 +351,9 @@ function renderCats(){
       [...cats.querySelectorAll('button')].forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
       if (q.value.trim()) {
-        // se c'è ricerca attiva, restiamo in vista globale
-        renderAllSections();
+        renderAllSections();   // con ricerca attiva: vista globale
       } else {
-        renderSection(c.key);
+        renderSection(c.key);  // altrimenti mostra sezione scelta
       }
     });
     cats.appendChild(b);
@@ -385,16 +416,14 @@ function renderAllSections(){
       return (name + ' ' + desc).toLowerCase().includes(term);
     });
     if (!term || matched.length > 0) {
-      // se non c'è termine, mostriamo la cat corrente (fallback); se c'è termine, solo quelle con match
-      if (!term) return; // la vista standard è gestita da renderSection
+      if (!term) return; // vista standard gestita da renderSection
       content.appendChild(buildCategoryCard(cat, matched));
     }
   });
 
-  // Se c'è ricerca e nessuna categoria ha match, mostriamo un messaggio
   if (term && content.children.length === 0) {
     const empty = document.createElement('div'); empty.className = 'card';
-    empty.innerHTML = `<h2>🔎 Nessun risultato</h2><div class="desc">Prova a cercare con un'altra parola.</div>`;
+    empty.innerHTML = `<h2>🔎 Nessun risultato</h2><div class="desc">Prova con un'altra parola.</div>`;
     content.appendChild(empty);
   }
 }
@@ -411,7 +440,6 @@ function renderAll(){
 
 langBtn.addEventListener('click', () => {
   lang = (lang==='it') ? 'en' : 'it';
-  // se sto cercando, tieni la vista globale aggiornata
   if (q.value.trim()) {
     renderCats();
     renderAllSections();
@@ -423,9 +451,8 @@ langBtn.addEventListener('click', () => {
 q.addEventListener('input', () => {
   const term = q.value.trim();
   if (term) {
-    renderAllSections();      // vista globale con match
+    renderAllSections();
   } else {
-    // torna alla categoria selezionata
     const current = document.querySelector('#cats button.active');
     const idx = [...cats.children].indexOf(current);
     const key = MENU[idx >= 0 ? idx : 0].key;
