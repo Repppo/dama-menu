@@ -112,11 +112,62 @@ section{ display:flex; flex-direction:column; gap:22px; }
   box-shadow:0 10px 20px rgba(0,0,0,.25);
 }
 .card h2{margin:.2rem 0 10px; font-size:20px; letter-spacing:.02em}
-.grid{ display:grid; grid-template-columns:1fr auto; gap:10px 14px; align-items:start; }
-@media (max-width: 600px){ .grid{grid-template-columns:1fr} .price{justify-self:start} }
-.item-name{font-weight:600}
-.desc{color:var(--muted); font-size:13px}
-.price{ font-variant-numeric:tabular-nums; color:var(--accent); font-weight:700; justify-self:end; }
+/* Lista voci dentro la card */
+.grid{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Ogni riga voce è una piccola griglia 1fr | auto */
+.item{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;   /* r1: titolo, r2: descrizione */
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: start;
+}
+
+/* Colonna sinistra */
+.item-name{
+  grid-column: 1;
+  grid-row: 1;
+  font-weight: 600;
+}
+
+.desc{
+  grid-column: 1;
+  grid-row: 2;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Prezzo: colonna destra, centrato verticalmente alla riga del titolo */
+.price{
+  grid-column: 2;
+  grid-row: 1;           /* stessa riga del titolo */
+  align-self: center;    /* centrato rispetto al titolo */
+  justify-self: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Optional: se lo schermo è strettissimo, facciamo andare il prezzo sotto il titolo */
+@media (max-width: 360px){
+  .item{
+    grid-template-columns: 1fr;
+  }
+  .price{
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    margin-top: 2px;
+  }
+}
+
 .note{color:var(--muted); font-size:12px; margin-top:6px}
 
 footer{ max-width:1100px; margin:36px auto; padding:0 16px 28px; color:var(--muted); font-size:12px }
