@@ -14,17 +14,29 @@ function flagIT(){
   </svg>`;
 }
 function flagEN(){
-  return `<svg viewBox="0 0 24 24" role="img" aria-label="English">
-    <defs><clipPath id="c2"><circle cx="12" cy="12" r="12"/></clipPath></defs>
-    <g clip-path="url(#c2)">
-      <rect width="24" height="24" fill="#012169"/>
-      <rect x="10" width="4" height="24" fill="#FFF"/>
-      <rect y="10" width="24" height="4" fill="#FFF"/>
-      <rect x="11" width="2" height="24" fill="#C8102E"/>
-      <rect y="11" width="24" height="2" fill="#C8102E"/>
-    </g>
-  </svg>`;
+  return `
+<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" role="img" aria-label="English">
+  <defs>
+    <!-- clip rotondo -->
+    <clipPath id="ukCircle"><circle cx="30" cy="15" r="15"/></clipPath>
+    <!-- clip per tenere le diagonali rosse “sotto” alla croce centrale -->
+    <clipPath id="ukDiagCut"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 z"/></clipPath>
+  </defs>
+  <g clip-path="url(#ukCircle)">
+    <!-- fondo blu -->
+    <rect width="60" height="30" fill="#012169"/>
+    <!-- diagonali bianche -->
+    <path d="M0,0 L60,30 M60,0 L0,30" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- diagonali rosse (clippate per non invadere la croce centrale) -->
+    <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#ukDiagCut)"/>
+    <!-- croce centrale bianca -->
+    <path d="M30,0 V30 M0,15 H60" stroke="#FFFFFF" stroke-width="10"/>
+    <!-- croce centrale rossa -->
+    <path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/>
+  </g>
+</svg>`;
 }
+
 function renderFlag(){
   const el = document.getElementById('flag');
   if(el) el.innerHTML = (lang==='it') ? flagIT() : flagEN();
