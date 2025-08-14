@@ -52,7 +52,6 @@
     .lang-btn svg{width:18px;height:18px}
 
     main{max-width:1100px; margin:18px auto 80px; padding:0 16px; display:grid; grid-template-columns:280px 1fr; gap:18px}
-
     nav{
       position:sticky; top:70px; align-self:start; background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius);
       padding:10px; display:flex; flex-direction:column; gap:6px; box-shadow:0 10px 20px rgba(0,0,0,.25);
@@ -60,6 +59,7 @@
     nav button{
       text-align:left; padding:10px 12px; border:none; background:transparent; border-radius:10px; cursor:pointer; color:var(--ink);
     }
+    nav button .emoji{margin-right:6px}
     nav button.active, nav button:hover{background:rgba(229,192,123,.10); color:var(--accent)}
 
     section{ display:flex; flex-direction:column; gap:22px; }
@@ -79,29 +79,16 @@
 
     /* --- MOBILE OVERRIDES --- */
     @media (max-width: 880px) {
-      main {
-        grid-template-columns: 1fr;
-      }
-      .pill input {
-        width: 160px;
-      }
+      main { grid-template-columns: 1fr; }
+      .pill input { width: 160px; }
       nav {
-        position: static;            /* niente sticky su mobile */
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;            /* scorrevole orizzontalmente */
-        gap: 8px;
-        background: var(--card);
-        border-radius: var(--radius);
-        border: 1px solid rgba(255,255,255,.06);
-        padding: 8px;
+        position: static; display: flex; flex-direction: row;
+        overflow-x: auto; gap: 8px; background: var(--card);
+        border-radius: var(--radius); border: 1px solid rgba(255,255,255,.06); padding: 8px;
       }
-      nav button {
-        flex: 0 0 auto;              /* non si restringono */
-        white-space: nowrap;
-      }
+      nav button { flex: 0 0 auto; white-space: nowrap; }
     }
-        
+
     /* print-friendly */
     @media print{
       header, nav, .pill, .lang-btn{display:none}
@@ -115,7 +102,8 @@
   <header>
     <div class="bar">
       <div class="brand" aria-label="DA·MA Milano">
-        <img class="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXkzsrHFRTznkI8GMTc8sIHqKLwR2k4gjKQ&s" alt="DA·MA Milano" />
+        <!-- Usa un tuo file locale se preferisci -->
+        <img class="logo" src="logo-dama.png" alt="DA·MA Milano" />
       </div>
 
       <div class="pill" role="search">
@@ -124,7 +112,6 @@
       </div>
 
       <button id="lang" class="lang-btn" title="Cambia lingua / Switch language" aria-label="Switch language">
-        <!-- simple globe icon -->
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
         <span id="langLabel">IT</span>
       </button>
@@ -144,16 +131,13 @@
 
 <script>
 /** =========================
- *  Data (EN + IT) — from the attached menu PDF.
+ *  Data (EN + IT) + emoji
  *  =========================
  */
 const fmtEuro = (v) => Number(v).toFixed(2).replace('.', ',');
 
 const MENU = [
-  {
-    key: "coffee",
-    it: "Caffetteria",
-    en: "Coffee & Hot Drinks",
+  { key: "coffee",   emoji:"☕", it:"Caffetteria", en:"Coffee & Hot Drinks",
     items: [
       {it:"Espresso", en:"Espresso", price:1.30},
       {it:"Decaffeinato", en:"Decaf Espresso", price:1.40},
@@ -169,13 +153,9 @@ const MENU = [
       {it:"Cioccolata calda / con panna", en:"Hot Chocolate / with whipped cream", price:"4.00 / 4.50"},
       {it:"Shakerato / con alcool", en:"Shakerato / with alcohol", price:"4.00 / 4.50"},
       {it:"Spremuta d’arancia", en:"Orange Juice", price:4.00}
-    ],
-    notes: { it:null, en:null }
+    ]
   },
-  {
-    key:"soft",
-    it:"Bevande",
-    en:"Soft Drinks",
+  { key:"soft",      emoji:"🥤", it:"Bevande", en:"Soft Drinks",
     items:[
       {it:"Acqua naturale o gassata 0,5 l", en:"Water still or sparkling 0.5l", price:1.20},
       {it:"Coca Cola o Zero", en:"Coca Cola or Zero", price:3.50},
@@ -197,10 +177,7 @@ const MENU = [
     ],
     notes:{it:"I prezzi delle bevande variano con l’opzione aperitivo.", en:"Drink prices vary with the aperitif option."}
   },
-  {
-    key:"savory",
-    it:"Il Salato",
-    en:"Savory",
+  { key:"savory",    emoji:"🥪", it:"Il Salato", en:"Savory",
     items:[
       {it:"Toast (prosciutto cotto, fontina)", en:"Toast (ham, fontina cheese)", price:4.50},
       {it:"Toast Farcito (prosciutto cotto, brie, funghi)", en:"Stuffed Toast (ham, brie, mushrooms)", price:5.00},
@@ -210,10 +187,7 @@ const MENU = [
       {it:"Piatto Brunch (salmone affumicato, avocado, uova strapazzate, bacon croccante)", en:"Brunch Plate (smoked salmon, avocado, scrambled eggs, crispy bacon)", price:14.00}
     ]
   },
-  {
-    key:"sweet",
-    it:"Il Dolce",
-    en:"Sweet",
+  { key:"sweet",     emoji:"🍰", it:"Il Dolce", en:"Sweet",
     items:[
       {it:"Brioches", en:"Brioches", price:"da 1.00 a 1.50"},
       {it:"Pasticceria", en:"Pastry", price:"da 0.70 a 2.70"},
@@ -222,18 +196,12 @@ const MENU = [
     ],
     notes:{it:"* I prodotti potrebbero essere congelati", en:"* The products could be frozen"}
   },
-  {
-    key:"juice",
-    it:"Centrifugati",
-    en:"Fresh Mixed Juices",
+  { key:"juice",     emoji:"🧃", it:"Centrifugati", en:"Fresh Mixed Juices",
     items:[
       {it:"Ingredienti a tua scelta", en:"Ingredients of your choice", desc_it:"ananas, arancia, mela, carota, sedano, finocchio, cetriolo, zenzero", desc_en:"pineapple, orange, apple, carrot, celery, fennel, cucumber, ginger", price:7.00}
     ]
   },
-  {
-    key:"cocktails",
-    it:"Cocktail List",
-    en:"Cocktail List",
+  { key:"cocktails", emoji:"🍸", it:"Cocktail List", en:"Cocktail List",
     items:[
       {it:"Americano", en:"Americano", price:8.00},
       {it:"Negroni", en:"Negroni", price:9.00},
@@ -254,29 +222,20 @@ const MENU = [
       {it:"Paloma", en:"Paloma", desc_en:"Mezcal, lime, grapefruit soda, sugar, salt", desc_it:"Mezcal, lime, soda al pompelmo, sciroppo di zucchero, sale", price:9.00}
     ]
   },
-  {
-    key:"wines",
-    it:"Vini",
-    en:"Wines",
+  { key:"wines",     emoji:"🍷", it:"Vini", en:"Wines",
     items:[
       {it:"Vini rossi (calice)", en:"Red Wine (glass)", price:6.00},
       {it:"Vini bianchi (calice)", en:"White Wine (glass)", price:6.00},
       {it:"Bollicine (calice)", en:"Sparkling Wine (glass)", price:"6.00 / 8.00"}
     ]
   },
-  {
-    key:"aperitif",
-    it:"Per arricchire l’aperitivo",
-    en:"To Enrich the Aperitif",
+  { key:"aperitif",  emoji:"🧀", it:"Per arricchire l’aperitivo", en:"To Enrich the Aperitif",
     items:[
       {it:"Tagliere", en:"Cold cuts & cheeses board", price:14.00, desc_it:"Salumi e formaggi a seconda della disponibilità, con marmellate e giardiniera", desc_en:"Cold cuts & cheeses depending on availability, with jams and giardiniera"},
       {it:"Pinsa Margherita", en:"Pinsa Margherita", price:10.00}
     ]
   },
-  {
-    key:"beer",
-    it:"Birre",
-    en:"Beers",
+  { key:"beer",      emoji:"🍺", it:"Birre", en:"Beers",
     items:[
       {it:"Menabrea Lager 0,4 l", en:"Menabrea Lager 0.4l", price:6.00},
       {it:"Menabrea 0,2 l", en:"Menabrea 0.2l", price:3.50},
@@ -287,10 +246,7 @@ const MENU = [
       {it:"Artigianali Legnone 0,33 l (Double IPA · Strong Ale)", en:"Artigianali Legnone 0.33l (Double IPA · Strong Ale)", price:8.00}
     ]
   },
-  {
-    key:"mocktails",
-    it:"Alcool Free",
-    en:"Alcohol Free",
+  { key:"mocktails", emoji:"🍹", it:"Alcool Free", en:"Alcohol Free",
     items:[
       {it:"VÜN", en:"VÜN", desc_it:"Succo d’ananas, sciroppo di pesca, sciroppo di cocco", desc_en:"Pineapple juice, peach syrup, coconut syrup", price:8.00},
       {it:"DÜ", en:"DÜ", desc_it:"Ginger ale, lime, menta, zucchero di canna", desc_en:"Ginger ale, lime, mint, brown sugar", price:8.00},
@@ -299,10 +255,7 @@ const MENU = [
       {it:"POMODORO CONDITO", en:"Tomato Condito", desc_it:"Succo di pomodoro, salsa Worcestershire, Tabasco, limone, olio, sale, pepe", desc_en:"Tomato juice, Worcestershire sauce, Tabasco, lemon, oil, salt, pepper", price:8.00}
     ]
   },
-  {
-    key:"sandwiches",
-    it:"Panini e Piadine",
-    en:"Sandwiches & Piadine",
+  { key:"sandwiches", emoji:"🥙", it:"Panini e Piadine", en:"Sandwiches & Piadine",
     items:[
       {it:"Brera", en:"Brera", desc_it:"Bresaola, parmigiano, rucola, olio, limone, pepe", desc_en:"Bresaola, parmesan, rocket, oil, lemon, pepper", price:9.00},
       {it:"Porta Genova", en:"Porta Genova", desc_it:"Tacchino, squacquerone, rucola, funghi", desc_en:"Turkey, squacquerone cheese, rocket, mushrooms", price:8.00},
@@ -321,10 +274,7 @@ const MENU = [
       {it:"Club Vegetariano", en:"Club Vegetariano", desc_it:"Scamorza affumicata, pomodoro fresco, verdure grigliate", desc_en:"Smoked scamorza, fresh tomato, grilled vegetables", price:10.00}
     ]
   },
-  {
-    key:"salads",
-    it:"Insalate",
-    en:"Salads",
+  { key:"salads",    emoji:"🥗", it:"Insalate", en:"Salads",
     items:[
       {it:"Greca", en:"Greek", desc_it:"Misticanza, feta, pomodoro fresco, cetrioli, cipolla rossa, olive nere, origano", desc_en:"Mixed salad, feta cheese, fresh tomato, cucumbers, red onion, black olives, oregano", price:10.00},
       {it:"Cesar Salad", en:"Cesar Salad", desc_it:"Misticanza, pollo alla griglia*, scaglie di parmigiano, pomodoro fresco, salsa cesar", desc_en:"Mixed salad, grilled chicken*, parmesan flakes, fresh tomato, cesar sauce", price:10.00},
@@ -337,54 +287,72 @@ const MENU = [
 ];
 
 /** =========================
- *  State & Rendering
+ *  Helpers + Stato
  *  =========================
  */
-let lang = (navigator.language || '').toLowerCase().startsWith('it') ? 'it' : 'en'; // default based on browser
+function money(v){
+  if(typeof v === 'number') return '€ ' + fmtEuro(v);
+  if(typeof v === 'string' && v.includes('/')) {
+    return '€ ' + v.split('/').map(s => s.trim()).join(' / € ');
+  }
+  return v || '';
+}
+
+let lang = (navigator.language || '').toLowerCase().startsWith('it') ? 'it' : 'en';
 const cats = document.getElementById('cats');
 const content = document.getElementById('content');
 const q = document.getElementById('q');
 const langBtn = document.getElementById('lang');
 const langLabel = document.getElementById('langLabel');
 
-function money(v){
-  if(typeof v === 'number') return '€ ' + fmtEuro(v);
-  if(typeof v === 'string' && v.includes('/')) {
-    return '€ ' + v.split('/').map(function(s){ return s.trim(); }).join(' / € ');
-  }
-  return v || '';
-}
-
+/** =========================
+ *  Rendering NAV
+ *  =========================
+ */
 function renderCats(){
   cats.innerHTML = '';
-  MENU.forEach(function(c, i){
+  MENU.forEach((c, i) => {
     const b = document.createElement('button');
-    b.textContent = lang === 'it' ? c.it : c.en;
+    b.innerHTML = (c.emoji ? `<span class="emoji">${c.emoji}</span>` : '') + (lang === 'it' ? c.it : c.en);
     b.className = i===0 ? 'active' : '';
-    b.addEventListener('click', function(){
-      Array.prototype.forEach.call(cats.querySelectorAll('button'), function(x){ x.classList.remove('active'); });
+    b.addEventListener('click', () => {
+      [...cats.querySelectorAll('button')].forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
-      renderSection(c.key);
+      if (q.value.trim()) {
+        // se c'è ricerca attiva, restiamo in vista globale
+        renderAllSections();
+      } else {
+        renderSection(c.key);
+      }
     });
     cats.appendChild(b);
   });
 }
 
+/** =========================
+ *  Rendering SEZIONE SINGOLA
+ *  =========================
+ */
 function renderSection(key){
-  const cat = MENU.find(function(x){ return x.key===key; }) || MENU[0];
+  const cat = MENU.find(x => x.key===key) || MENU[0];
   content.innerHTML = '';
+  content.appendChild(buildCategoryCard(cat, cat.items));
+}
+
+/** =========================
+ *  Rendering GLOBALE (ricerca)
+ *  =========================
+ */
+function buildCategoryCard(cat, items){
   const card = document.createElement('div'); card.className='card';
-  const h2 = document.createElement('h2'); h2.textContent = lang==='it'?cat.it:cat.en;
+  const h2 = document.createElement('h2');
+  h2.textContent = (cat.emoji ? cat.emoji + ' ' : '') + (lang==='it'?cat.it:cat.en);
   card.appendChild(h2);
 
   const grid = document.createElement('div'); grid.className='grid';
-  const term = (q.value||'').trim().toLowerCase();
-  for(var i=0;i<cat.items.length;i++){
-    var it = cat.items[i];
+  items.forEach(it => {
     const name = lang==='it'? it.it : it.en;
     const desc = lang==='it'? (it.desc_it||'') : (it.desc_en||'');
-    const hay = (name + ' ' + desc).toLowerCase();
-    if(term && hay.indexOf(term) === -1) continue;
 
     const nameEl = document.createElement('div'); nameEl.className='item-name'; nameEl.textContent = name;
     grid.appendChild(nameEl);
@@ -394,9 +362,9 @@ function renderSection(key){
 
     if(desc){
       const d = document.createElement('div'); d.className='desc'; d.textContent = desc; grid.appendChild(d);
-      const spacer = document.createElement('div'); grid.appendChild(spacer);
+      grid.appendChild(document.createElement('div'));
     }
-  }
+  });
   card.appendChild(grid);
 
   if(cat.notes && (cat.notes.it || cat.notes.en)){
@@ -404,26 +372,65 @@ function renderSection(key){
     note.textContent = lang==='it' ? (cat.notes.it || '') : (cat.notes.en || '');
     card.appendChild(note);
   }
-
-  content.appendChild(card);
+  return card;
 }
 
+function renderAllSections(){
+  const term = (q.value || '').trim().toLowerCase();
+  content.innerHTML = '';
+  MENU.forEach(cat => {
+    const matched = cat.items.filter(it => {
+      const name = lang === 'it' ? it.it : it.en;
+      const desc = lang === 'it' ? (it.desc_it || '') : (it.desc_en || '');
+      return (name + ' ' + desc).toLowerCase().includes(term);
+    });
+    if (!term || matched.length > 0) {
+      // se non c'è termine, mostriamo la cat corrente (fallback); se c'è termine, solo quelle con match
+      if (!term) return; // la vista standard è gestita da renderSection
+      content.appendChild(buildCategoryCard(cat, matched));
+    }
+  });
+
+  // Se c'è ricerca e nessuna categoria ha match, mostriamo un messaggio
+  if (term && content.children.length === 0) {
+    const empty = document.createElement('div'); empty.className = 'card';
+    empty.innerHTML = `<h2>🔎 Nessun risultato</h2><div class="desc">Prova a cercare con un'altra parola.</div>`;
+    content.appendChild(empty);
+  }
+}
+
+/** =========================
+ *  Wiring lingua + ricerca
+ *  =========================
+ */
 function renderAll(){
   renderCats();
   renderSection(MENU[0].key);
   langLabel.textContent = lang.toUpperCase();
 }
 
-langBtn.addEventListener('click', function(){
+langBtn.addEventListener('click', () => {
   lang = (lang==='it') ? 'en' : 'it';
-  renderAll();
+  // se sto cercando, tieni la vista globale aggiornata
+  if (q.value.trim()) {
+    renderCats();
+    renderAllSections();
+  } else {
+    renderAll();
+  }
 });
 
-q.addEventListener('input', function(){
-  const current = cats.querySelector('button.active');
-  const idx = Array.prototype.indexOf.call(cats.children, current);
-  const key = MENU[idx >= 0 ? idx : 0].key;
-  renderSection(key);
+q.addEventListener('input', () => {
+  const term = q.value.trim();
+  if (term) {
+    renderAllSections();      // vista globale con match
+  } else {
+    // torna alla categoria selezionata
+    const current = document.querySelector('#cats button.active');
+    const idx = [...cats.children].indexOf(current);
+    const key = MENU[idx >= 0 ? idx : 0].key;
+    renderSection(key);
+  }
 });
 
 renderAll();
