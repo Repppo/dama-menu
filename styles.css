@@ -37,26 +37,35 @@ header{
   display:flex; gap:10px; align-items:center;
   flex-wrap:nowrap; /* non spezzare l'header */
 }
+
+.bar img { /* logo immagine */
+  height:40px; 
+}
+
 @media (max-width:560px){
   .bar{ gap:8px; } /* teniamo tutto su una riga finché possibile */
 }
 
-/* Wordmark su due righe compatte */
-.brand{display:flex; align-items:center; flex:0 0 auto;}
-.wordmark{
-  display:flex; flex-direction:column; align-items:flex-start;
-  gap:2px; text-decoration:none; color:#fff; line-height:1.05;
-}
-.wordmark .brand-text{
-  font-family:"Playfair Display", serif;
-  font-weight:800; letter-spacing:.08em; font-size:22px; line-height:1;
-}
-.wordmark .brand-text .sep{ margin:0 .12em; }
-.wordmark .city{
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
-  font-weight:600; letter-spacing:.18em; text-transform:uppercase;
-  color:var(--muted); font-size:11px; line-height:1;
-}
+/* Wordmark su due righe compatte (logo testuale) 
+
+  .brand{display:flex; align-items:center; flex:0 0 auto;}
+
+  .wordmark{
+    display:flex; flex-direction:column; align-items:flex-start;
+    gap:2px; text-decoration:none; color:#fff; line-height:1.05;
+  }
+  .wordmark .brand-text{
+    font-family:"Playfair Display", serif;
+    font-weight:800; letter-spacing:.08em; font-size:22px; line-height:1;
+  }
+  .wordmark .brand-text .sep{ margin:0 .12em; }
+  .wordmark .city{
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+    font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--muted); font-size:11px; line-height:1;
+  }
+
+*/
 
 /* Search compatta: non fa andare a capo l'header e non causa zoom su iOS */
 .pill{
@@ -112,6 +121,7 @@ section{ display:flex; flex-direction:column; gap:22px; }
   box-shadow:0 10px 20px rgba(0,0,0,.25);
 }
 .card h2{margin:.2rem 0 10px; font-size:20px; letter-spacing:.02em}
+
 /* Lista voci dentro la card */
 .grid{
   display: flex;
